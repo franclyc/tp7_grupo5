@@ -1,29 +1,32 @@
-<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
-                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
-             version="3.0">
-    
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+    xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
     <persistence-unit name="TestPersistence">
-	    <!-- Proveedor de JPA -->
+        <!-- Proveedor de JPA -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
         <!-- Clases de entidades -->
-        <class>ar.edu.unju.escmi.entities.Libro</class>
-        
-        <!-- Propiedades de conexión -->
+        <class>ar.edu.unju.escmi.entities.Cliente</class>
+        <class>ar.edu.unju.escmi.entities.Producto</class>
+        <class>ar.edu.unju.escmi.entities.Factura</class>
+        <class>ar.edu.unju.escmi.entities.DetalleFactura</class>
+
         <properties>
-			<!-- Conexión a la base de datos -->
-			<property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/persistencebd?zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
-            <property name="jakarta.persistence.jdbc.user" value="root"/>
-            <property name="jakarta.persistence.jdbc.password" value="abc_123"/>
-			<!-- Configuración de Hibernate -->
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>   
-			<!--   <property name="hibernate.hbm2ddl.auto" value="update"/> -->   
-			<!--  <property name="hibernate.hbm2ddl.auto" value="create"/> -->
-			<property name = "hibernate.show_sql" value = "true" />
-			<property name="hibernate.format_sql" value="true"/>
+            <!-- Conexión a la base de datos (cambiar usuario y contraseña por los de cada uno) -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tp7_grupo5?createDatabaseIfNotExist=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="abc_123"/>
+
+            <!-- Configuración de Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
