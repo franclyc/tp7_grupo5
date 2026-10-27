@@ -22,7 +22,7 @@
             <property name="javax.persistence.jdbc.password" value="abc_123"/>
 
             <!-- Configuración de Hibernate -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tp7_grupo5?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
             <property name="hibernate.show_sql" value="false"/>

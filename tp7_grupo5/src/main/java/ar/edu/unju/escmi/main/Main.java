@@ -13,7 +13,14 @@ public class Main {
 			System.out.println("Conexión OK con la unidad de persistencia: " + emf.isOpen());
 			emf.close();
 		} catch (Exception e) {
-			System.out.println("No se pudo conectar con la base de datos: " + e.getMessage());
+			// El mensaje útil suele estar en la última causa de la cadena de excepciones
+			Throwable causa = e;
+			while (causa.getCause() != null) {
+				causa = causa.getCause();
+			}
+			System.out.println("No se pudo conectar con la base de datos.");
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Causa: " + causa.getClass().getSimpleName() + " - " + causa.getMessage());
 		}
 	}
 
