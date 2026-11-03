@@ -12,7 +12,6 @@ import ar.edu.unju.escmi.dao.IProductoDao;
 import ar.edu.unju.escmi.entities.Producto;
 
 public class ProductoDaoImp implements IProductoDao {
-	// Única fábrica de EntityManager de toda la aplicación (patrón Singleton)
 	private EntityManagerFactory emf = EmfSingleton.getInstance().getEmf();
 
 	@Override
@@ -42,7 +41,6 @@ public class ProductoDaoImp implements IProductoDao {
 		}
 	}
 
-	// Solo devuelve los productos activos (los eliminados lógicamente tienen estado = false)
 	@Override
 	public List<Producto> listar() {
 		EntityManager manager = emf.createEntityManager();
@@ -81,7 +79,9 @@ public class ProductoDaoImp implements IProductoDao {
 			if (producto == null) {
 				throw new IllegalArgumentException("No existe un producto con id " + id);
 			}
-			// El producto está administrado por el manager: el cambio se guarda al hacer commit
+			if (!producto.isEstado()) {
+				throw new IllegalArgumentException("El producto con id " + id + " ya estaba eliminado");
+			}
 			producto.setEstado(false);
 			manager.getTransaction().commit();
 		} catch (Exception e) {

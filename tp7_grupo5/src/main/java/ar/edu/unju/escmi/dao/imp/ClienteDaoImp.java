@@ -12,7 +12,6 @@ import ar.edu.unju.escmi.dao.IClienteDao;
 import ar.edu.unju.escmi.entities.Cliente;
 
 public class ClienteDaoImp implements IClienteDao {
-	// Única fábrica de EntityManager de toda la aplicación (patrón Singleton)
 	private EntityManagerFactory emf = EmfSingleton.getInstance().getEmf();
 
 	@Override
@@ -42,7 +41,6 @@ public class ClienteDaoImp implements IClienteDao {
 		}
 	}
 
-	// Solo devuelve los clientes activos (los eliminados lógicamente tienen estado = false)
 	@Override
 	public List<Cliente> listar() {
 		EntityManager manager = emf.createEntityManager();
@@ -81,7 +79,9 @@ public class ClienteDaoImp implements IClienteDao {
 			if (cliente == null) {
 				throw new IllegalArgumentException("No existe un cliente con id " + id);
 			}
-			// El cliente está administrado por el manager: el cambio se guarda al hacer commit
+			if (!cliente.isEstado()) {
+				throw new IllegalArgumentException("El cliente con id " + id + " ya estaba eliminado");
+			}
 			cliente.setEstado(false);
 			manager.getTransaction().commit();
 		} catch (Exception e) {

@@ -12,10 +12,8 @@ import ar.edu.unju.escmi.dao.IFacturaDao;
 import ar.edu.unju.escmi.entities.Factura;
 
 public class FacturaDaoImp implements IFacturaDao {
-	// Única fábrica de EntityManager de toda la aplicación (patrón Singleton)
 	private EntityManagerFactory emf = EmfSingleton.getInstance().getEmf();
 
-	// Al persistir la factura también se guardan sus detalles (CascadeType.ALL en Factura.detalles)
 	@Override
 	public void guardar(Factura factura) {
 		EntityManager manager = emf.createEntityManager();
@@ -43,7 +41,6 @@ public class FacturaDaoImp implements IFacturaDao {
 		}
 	}
 
-	// Consulta dinámica: solo devuelve las facturas activas
 	@Override
 	public List<Factura> listar() {
 		EntityManager manager = emf.createEntityManager();
@@ -65,7 +62,9 @@ public class FacturaDaoImp implements IFacturaDao {
 			if (factura == null) {
 				throw new IllegalArgumentException("No existe una factura con id " + id);
 			}
-			// La factura está administrada por el manager: el cambio se guarda al hacer commit
+			if (!factura.isEstado()) {
+				throw new IllegalArgumentException("La factura con id " + id + " ya estaba eliminada");
+			}
 			factura.setEstado(false);
 			manager.getTransaction().commit();
 		} catch (Exception e) {
@@ -78,7 +77,6 @@ public class FacturaDaoImp implements IFacturaDao {
 		}
 	}
 
-	// Consulta estática: usa la @NamedQuery "Factura.mayoresA" declarada en la entidad Factura
 	@Override
 	public List<Factura> listarMayoresA(double total) {
 		EntityManager manager = emf.createEntityManager();
