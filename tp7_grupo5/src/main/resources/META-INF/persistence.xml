@@ -17,12 +17,12 @@
         <properties>
             <!-- Conexión a la base de datos (cambiar usuario y contraseña por los de cada uno) -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tp7_grupo5?createDatabaseIfNotExist=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tp7_grupo5?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="abc_123"/>
 
             <!-- Configuración de Hibernate -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tp7_grupo5?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
             <property name="hibernate.show_sql" value="false"/>
