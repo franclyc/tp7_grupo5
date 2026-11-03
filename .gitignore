@@ -1,0 +1,14 @@
+# Archivos compilados / build de Maven
+target/
+*.class
+
+# Metadatos de IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
