@@ -31,7 +31,6 @@ public class Factura {
 	@Column(name = "fac_fecha", nullable = false)
 	private LocalDate fecha;
 
-	// Muchas facturas pertenecen a un cliente. Factura es la entidad propietaria (tiene la FK cli_id)
 	@ManyToOne
 	@JoinColumn(name = "cli_id", nullable = false)
 	private Cliente cliente;
@@ -45,9 +44,6 @@ public class Factura {
 	@Column(name = "fac_estado")
 	private boolean estado;
 
-	// Una factura tiene muchos detalles. El dueño de la relación es DetalleFactura (atributo "factura").
-	// CascadeType.ALL: al guardar la factura se guardan también sus detalles.
-	// EAGER: los detalles se traen junto con la factura para poder mostrarlos.
 	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<DetalleFactura> detalles = new ArrayList<>();
 
@@ -63,7 +59,6 @@ public class Factura {
 		this.estado = true;
 	}
 
-	// Agrega el detalle manteniendo los dos lados de la relación y actualiza el total
 	public void agregarDetalle(DetalleFactura detalle) {
 		detalle.setFactura(this);
 		this.detalles.add(detalle);

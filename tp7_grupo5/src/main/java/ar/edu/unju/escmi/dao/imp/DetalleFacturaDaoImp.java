@@ -12,11 +12,8 @@ import ar.edu.unju.escmi.dao.IDetalleFacturaDao;
 import ar.edu.unju.escmi.entities.DetalleFactura;
 
 public class DetalleFacturaDaoImp implements IDetalleFacturaDao {
-	// Única fábrica de EntityManager de toda la aplicación (patrón Singleton)
 	private EntityManagerFactory emf = EmfSingleton.getInstance().getEmf();
 
-	// Normalmente no hace falta: los detalles se guardan junto con la factura por la cascada.
-	// Sirve para agregar un detalle a una factura que ya existe (el detalle debe tener su factura asignada).
 	@Override
 	public void guardar(DetalleFactura detalle) {
 		EntityManager manager = emf.createEntityManager();
