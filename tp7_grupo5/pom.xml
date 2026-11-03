@@ -25,6 +25,7 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- API de JPA con el namespace javax.persistence, que es el que usan las entidades y Hibernate 5.6 -->
     <dependency>
       <groupId>javax.persistence</groupId>
       <artifactId>javax.persistence-api</artifactId>
@@ -39,11 +40,6 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.30</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>5.6.7.Final</version>
     </dependency>
   </dependencies>
 
