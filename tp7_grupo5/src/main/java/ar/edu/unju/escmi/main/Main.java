@@ -86,7 +86,7 @@ public class Main {
 		String nombre = leerTexto("Nombre: ");
 		String apellido = leerTexto("Apellido: ");
 		String domicilio = leerTexto("Domicilio: ");
-		int dni = leerEntero("DNI: ");
+		int dni = leerEnteroPositivo("DNI: ");
 
 		Cliente cliente = new Cliente(nombre, apellido, domicilio, dni);
 		clienteDao.guardar(cliente);
@@ -388,7 +388,7 @@ public class Main {
 			String linea = sc.nextLine().trim().replace(",", ".");
 			try {
 				double valor = Double.parseDouble(linea);
-				if (valor > 0) {
+				if (Double.isFinite(valor) && valor > 0) {
 					return valor;
 				}
 				System.out.println("  El valor debe ser mayor a cero.");
