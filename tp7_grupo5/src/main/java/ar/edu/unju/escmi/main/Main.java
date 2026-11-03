@@ -17,47 +17,44 @@ import ar.edu.unju.escmi.entities.Producto;
 
 public class Main {
 
-	// Lector de datos por teclado, único para toda la aplicación
 	private static final Scanner sc = new Scanner(System.in);
 
-	// Acceso a datos a través del patrón DAO (se programa contra la interfaz, no la implementación)
 	private static final IClienteDao clienteDao = new ClienteDaoImp();
 	private static final IProductoDao productoDao = new ProductoDaoImp();
 	private static final IFacturaDao facturaDao = new FacturaDaoImp();
 
-	// Monto fijo pedido por la consigna para la opción 12
 	private static final double TOTAL_MINIMO_FACTURAS = 900000;
 
 	public static void main(String[] args) {
-		int opcion;
-		do {
-			mostrarMenu();
-			opcion = leerEntero("Seleccione una opción: ");
-			// Cada opción se ejecuta dentro de un try/catch para que un error no corte el programa
-			try {
-				switch (opcion) {
-					case 1 -> altaCliente();
-					case 2 -> altaProducto();
-					case 3 -> realizarVenta();
-					case 4 -> buscarFactura();
-					case 5 -> eliminarFactura();
-					case 6 -> eliminarProducto();
-					case 7 -> modificarCliente();
-					case 8 -> modificarPrecioProducto();
-					case 9 -> eliminarCliente();
-					case 10 -> mostrarFacturas();
-					case 11 -> mostrarClientes();
-					case 12 -> mostrarFacturasMayoresA(TOTAL_MINIMO_FACTURAS);
-					case 0 -> System.out.println("\nSaliendo del sistema...");
-					default -> System.out.println("\nOpción inexistente. Intente nuevamente.");
+		int opcion = -1;
+		try {
+			do {
+				mostrarMenu();
+				opcion = leerEntero("Seleccione una opción: ");
+				try {
+					switch (opcion) {
+						case 1 -> altaCliente();
+						case 2 -> altaProducto();
+						case 3 -> realizarVenta();
+						case 4 -> buscarFactura();
+						case 5 -> eliminarFactura();
+						case 6 -> eliminarProducto();
+						case 7 -> modificarCliente();
+						case 8 -> modificarPrecioProducto();
+						case 9 -> eliminarCliente();
+						case 10 -> mostrarFacturas();
+						case 11 -> mostrarClientes();
+						case 12 -> mostrarFacturasMayoresA(TOTAL_MINIMO_FACTURAS);
+						case 0 -> System.out.println("\nSaliendo del sistema...");
+						default -> System.out.println("\nOpción inexistente. Intente nuevamente.");
+					}
+				} catch (Exception e) {
+					System.out.println("\n[!] No se pudo completar la operación: " + obtenerMensajeDeError(e));
 				}
-			} catch (Exception e) {
-				// Mensaje claro para el usuario, sin que se interrumpa el flujo del menú
-				System.out.println("\n[!] No se pudo completar la operación: " + obtenerMensajeDeError(e));
-			}
-		} while (opcion != 0);
-
-		cerrarRecursos();
+			} while (opcion != 0);
+		} finally {
+			cerrarRecursos();
+		}
 	}
 
 	private static void mostrarMenu() {
@@ -78,9 +75,6 @@ public class Main {
 		System.out.println("==========================================================");
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 1 - Alta de cliente
-	// ---------------------------------------------------------------------
 	private static void altaCliente() {
 		System.out.println("\n----- ALTA DE CLIENTE -----");
 		String nombre = leerTexto("Nombre: ");
@@ -93,9 +87,6 @@ public class Main {
 		System.out.println("Cliente registrado correctamente: " + cliente);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 2 - Alta de producto
-	// ---------------------------------------------------------------------
 	private static void altaProducto() {
 		System.out.println("\n----- ALTA DE PRODUCTO -----");
 		String descripcion = leerTexto("Descripción: ");
@@ -106,13 +97,9 @@ public class Main {
 		System.out.println("Producto registrado correctamente: " + producto);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 3 - Realizar la venta (alta de una nueva factura)
-	// ---------------------------------------------------------------------
 	private static void realizarVenta() {
 		System.out.println("\n----- NUEVA VENTA (FACTURA) -----");
 
-		// 1) Elegir el cliente
 		List<Cliente> clientes = clienteDao.listar();
 		if (clientes.isEmpty()) {
 			System.out.println("No hay clientes registrados. Primero debe dar de alta un cliente (opción 1).");
@@ -126,7 +113,6 @@ public class Main {
 			return;
 		}
 
-		// 2) Cargar los productos de la factura
 		List<Producto> productos = productoDao.listar();
 		if (productos.isEmpty()) {
 			System.out.println("No hay productos registrados. Primero debe dar de alta un producto (opción 2).");
@@ -155,15 +141,11 @@ public class Main {
 			return;
 		}
 
-		// 3) Guardar la factura (sus detalles se guardan en cascada)
 		facturaDao.guardar(factura);
 		System.out.println("\nVenta registrada correctamente.");
 		mostrarFacturaCompleta(factura);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 4 - Buscar una factura por su número y mostrar todos sus datos
-	// ---------------------------------------------------------------------
 	private static void buscarFactura() {
 		System.out.println("\n----- BUSCAR FACTURA -----");
 		Long id = leerLong("Ingrese el número (id) de la factura: ");
@@ -175,9 +157,6 @@ public class Main {
 		mostrarFacturaCompleta(factura);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 5 - Eliminar una factura (baja lógica)
-	// ---------------------------------------------------------------------
 	private static void eliminarFactura() {
 		System.out.println("\n----- ELIMINAR FACTURA -----");
 		Long id = leerLong("Ingrese el número (id) de la factura a eliminar: ");
@@ -185,9 +164,6 @@ public class Main {
 		System.out.println("Factura " + id + " eliminada (baja lógica) correctamente.");
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 6 - Eliminar un producto (baja lógica)
-	// ---------------------------------------------------------------------
 	private static void eliminarProducto() {
 		System.out.println("\n----- ELIMINAR PRODUCTO -----");
 		List<Producto> productos = productoDao.listar();
@@ -201,9 +177,6 @@ public class Main {
 		System.out.println("Producto " + id + " eliminado (baja lógica) correctamente.");
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 7 - Modificar datos de un cliente
-	// ---------------------------------------------------------------------
 	private static void modificarCliente() {
 		System.out.println("\n----- MODIFICAR CLIENTE -----");
 		List<Cliente> clientes = clienteDao.listar();
@@ -228,9 +201,6 @@ public class Main {
 		System.out.println("Cliente modificado correctamente: " + cliente);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 8 - Modificar el precio de un producto
-	// ---------------------------------------------------------------------
 	private static void modificarPrecioProducto() {
 		System.out.println("\n----- MODIFICAR PRECIO DE PRODUCTO -----");
 		List<Producto> productos = productoDao.listar();
@@ -254,9 +224,6 @@ public class Main {
 		System.out.println("Precio modificado correctamente: " + producto);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 9 - Eliminar un cliente (baja lógica)
-	// ---------------------------------------------------------------------
 	private static void eliminarCliente() {
 		System.out.println("\n----- ELIMINAR CLIENTE -----");
 		List<Cliente> clientes = clienteDao.listar();
@@ -270,9 +237,6 @@ public class Main {
 		System.out.println("Cliente " + id + " eliminado (baja lógica) correctamente.");
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 10 - Mostrar todas las facturas (activas)
-	// ---------------------------------------------------------------------
 	private static void mostrarFacturas() {
 		System.out.println("\n----- LISTADO DE FACTURAS -----");
 		List<Factura> facturas = facturaDao.listar();
@@ -285,9 +249,6 @@ public class Main {
 		}
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 11 - Mostrar todos los clientes (activos)
-	// ---------------------------------------------------------------------
 	private static void mostrarClientes() {
 		System.out.println("\n----- LISTADO DE CLIENTES -----");
 		List<Cliente> clientes = clienteDao.listar();
@@ -298,9 +259,6 @@ public class Main {
 		mostrarListaClientes(clientes);
 	}
 
-	// ---------------------------------------------------------------------
-	// Opción 12 - Mostrar las facturas que superen un total determinado
-	// ---------------------------------------------------------------------
 	private static void mostrarFacturasMayoresA(double total) {
 		System.out.println("\n----- FACTURAS CON TOTAL MAYOR A $" + (long) total + " -----");
 		List<Factura> facturas = facturaDao.listarMayoresA(total);
@@ -313,9 +271,6 @@ public class Main {
 		}
 	}
 
-	// =====================================================================
-	// Métodos auxiliares para mostrar datos
-	// =====================================================================
 	private static void mostrarListaClientes(List<Cliente> clientes) {
 		System.out.println("Clientes:");
 		for (Cliente cliente : clientes) {
@@ -330,7 +285,6 @@ public class Main {
 		}
 	}
 
-	// Muestra la cabecera de la factura junto con el detalle de cada producto vendido
 	private static void mostrarFacturaCompleta(Factura factura) {
 		System.out.println("\n" + factura);
 		System.out.println("  Detalles:");
@@ -343,11 +297,6 @@ public class Main {
 		}
 	}
 
-	// =====================================================================
-	// Métodos auxiliares para leer y validar datos por teclado
-	// =====================================================================
-
-	// Lee un número entero; si el valor no es válido vuelve a pedirlo
 	private static int leerEntero(String mensaje) {
 		while (true) {
 			System.out.print(mensaje);
@@ -391,14 +340,13 @@ public class Main {
 				if (Double.isFinite(valor) && valor > 0) {
 					return valor;
 				}
-				System.out.println("  El valor debe ser mayor a cero.");
+				System.out.println("  El valor debe ser un número mayor a cero.");
 			} catch (NumberFormatException e) {
 				System.out.println("  Valor inválido. Ingrese un número (por ejemplo 1500.50).");
 			}
 		}
 	}
 
-	// Lee un texto obligatorio: no permite dejarlo vacío
 	private static String leerTexto(String mensaje) {
 		while (true) {
 			System.out.print(mensaje);
@@ -410,14 +358,12 @@ public class Main {
 		}
 	}
 
-	// Lee un texto en una modificación: si se deja vacío conserva el valor actual
 	private static String leerTextoConValorActual(String etiqueta, String valorActual) {
 		System.out.print(etiqueta + " [" + valorActual + "]: ");
 		String linea = sc.nextLine().trim();
 		return linea.isEmpty() ? valorActual : linea;
 	}
 
-	// Lee una respuesta de tipo sí/no
 	private static boolean leerConfirmacion(String mensaje) {
 		while (true) {
 			System.out.print(mensaje);
@@ -432,7 +378,6 @@ public class Main {
 		}
 	}
 
-	// Devuelve el mensaje de la causa más profunda de la excepción (suele ser el más útil)
 	private static String obtenerMensajeDeError(Exception e) {
 		Throwable causa = e;
 		while (causa.getCause() != null) {
@@ -442,12 +387,10 @@ public class Main {
 		return (mensaje != null) ? mensaje : causa.getClass().getSimpleName();
 	}
 
-	// Cierra la fábrica de EntityManager al salir del programa
 	private static void cerrarRecursos() {
 		try {
-			EmfSingleton.getInstance().getEmf().close();
+			EmfSingleton.getInstance().cerrar();
 		} catch (Exception e) {
-			// Si ya estaba cerrada o nunca se abrió, no es necesario hacer nada
 		}
 	}
 

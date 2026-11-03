@@ -21,4 +21,10 @@ public class EmfSingleton {
 			this.emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		return this.emf;
 	}
+
+	public void cerrar() {
+		if (this.emf != null && this.emf.isOpen()) {
+			this.emf.close();
+		}
+	}
 }
