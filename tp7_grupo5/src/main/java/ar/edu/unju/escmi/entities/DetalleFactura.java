@@ -17,7 +17,6 @@ public class DetalleFactura {
 	@Column(name = "det_id")
 	private Long id;
 
-	// Muchos detalles pueden referirse al mismo producto
 	@ManyToOne
 	@JoinColumn(name = "prod_id", nullable = false)
 	private Producto producto;
@@ -25,10 +24,12 @@ public class DetalleFactura {
 	@Column(name = "det_cantidad", nullable = false)
 	private int cantidad;
 
+	@Column(name = "det_precio_unitario", nullable = false)
+	private double precioUnitario;
+
 	@Column(name = "det_subtotal")
 	private double subtotal;
 
-	// Lado propietario de la relación Factura - DetalleFactura (tiene la FK fac_id)
 	@ManyToOne
 	@JoinColumn(name = "fac_id", nullable = false)
 	private Factura factura;
@@ -40,11 +41,12 @@ public class DetalleFactura {
 	public DetalleFactura(Producto producto, int cantidad) {
 		this.producto = producto;
 		this.cantidad = cantidad;
+		this.precioUnitario = producto.getPrecioUnitario();
 		this.subtotal = calcularSubtotal();
 	}
 
 	public double calcularSubtotal() {
-		return cantidad * producto.getPrecioUnitario();
+		return cantidad * precioUnitario;
 	}
 
 	public Long getId() {
@@ -71,6 +73,14 @@ public class DetalleFactura {
 		this.cantidad = cantidad;
 	}
 
+	public double getPrecioUnitario() {
+		return precioUnitario;
+	}
+
+	public void setPrecioUnitario(double precioUnitario) {
+		this.precioUnitario = precioUnitario;
+	}
+
 	public double getSubtotal() {
 		return subtotal;
 	}
@@ -87,11 +97,10 @@ public class DetalleFactura {
 		this.factura = factura;
 	}
 
-	// No se muestra la factura para evitar un bucle infinito Factura -> Detalle -> Factura
 	@Override
 	public String toString() {
 		return "DetalleFactura [id=" + id + ", producto=" + producto.getDescripcion() + ", precioUnitario="
-				+ producto.getPrecioUnitario() + ", cantidad=" + cantidad + ", subtotal=" + subtotal + "]";
+				+ precioUnitario + ", cantidad=" + cantidad + ", subtotal=" + subtotal + "]";
 	}
 
 }
