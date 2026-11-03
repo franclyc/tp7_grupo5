@@ -35,6 +35,7 @@ classDiagram
     class DetalleFactura {
         -Long id
         -int cantidad
+        -double precioUnitario
         -double subtotal
         +calcularSubtotal() double
     }
@@ -58,6 +59,7 @@ classDiagram
   producto. La entidad propietaria es `DetalleFactura` (tiene la clave foránea
   `prod_id`).
 
-El `subtotal` de cada `DetalleFactura` se calcula como
-`cantidad * producto.precioUnitario`, y el `total` de la `Factura` es la suma de
-los subtotales de sus detalles.
+Cada `DetalleFactura` guarda el `precioUnitario` del producto **en el momento de
+la venta**, de modo que una factura ya emitida no cambia si después se modifica
+el precio del producto. El `subtotal` se calcula como `cantidad * precioUnitario`,
+y el `total` de la `Factura` es la suma de los subtotales de sus detalles.
